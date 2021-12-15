@@ -6,7 +6,10 @@
   "autoload": {
     "psr-4": {
       "basteyy\\StaticMarkdownPages\\": "src/"
-    }
+    },
+    "files": [
+      "src/Helper/CamelSnake.php"
+    ]
   },
   "authors": [
     {
