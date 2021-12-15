@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace basteyy\StaticMarkdownPage\Helper;
+namespace basteyy\StaticMarkdownPages\Helper;
 
 function toSnakeCase(string $str, string $glue = '_'): string
 {

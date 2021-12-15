@@ -1,13 +1,12 @@
 <?php
 declare(strict_types=1);
 
-namespace basteyy\StaticMarkdownPage;
+namespace basteyy\StaticMarkdownPages;
 
-use basteyy\StaticMarkdownPage\Helper\SplitContent;
+use basteyy\StaticMarkdownPages\Helper\SplitContent;
 use DateTime;
 use DirectoryIterator;
 use Exception;
-use http\Exception\BadUrlException;
 use SplFileInfo;
 use Symfony\Component\Yaml\Yaml;
 
@@ -107,10 +106,24 @@ class Archive
         $this->pages_content[$metadata['url']] = $content;
 
         $this->pages[$metadata['url']] = $metadata + [
-                'filesize'        => $file->getSize(),
-                'filepath'        => $file->getRealPath(),
+                'filesize'    => $file->getSize(),
+                'filepath'    => $file->getRealPath(),
                 'last_update' => (new DateTime('@' . $file->getMTime()))->format('c')
             ];
+    }
+
+    /**
+     * Write current context to the index cache
+     */
+    private function generateIndexCache(): void
+    {
+        file_put_contents(
+            $this->cache_index,
+            sprintf("<?php\ndeclare(strict_types=1);\n/* Cache created on %s */\n\nreturn %s;\n\n",
+                (new DateTime())->format('c'),
+                var_export($this->pages, true)
+            )
+        );
     }
 
     /**
@@ -152,7 +165,7 @@ class Archive
             $pageObject = new Page($page, true);
 
             // Patch new filesize to index
-            if($page['filesize'] != $current_filesize) {
+            if ($page['filesize'] != $current_filesize) {
                 $this->patchIndex($page['url'], ['filesize' => $current_filesize]);
             }
 
@@ -177,10 +190,11 @@ class Archive
      * @param string $page_url
      * @param array $data
      */
-    private function patchIndex(string $page_url, array $data) {
+    private function patchIndex(string $page_url, array $data)
+    {
         $this->indexPatched = true;
 
-        foreach($data as $field => $value) {
+        foreach ($data as $field => $value) {
             $this->pages[$page_url][$field] = $value;
         }
     }
@@ -190,21 +204,8 @@ class Archive
      */
     public function __destruct()
     {
-        if($this->indexPatched) {
+        if ($this->indexPatched) {
             $this->generateIndexCache();
         }
-    }
-
-    /**
-     * Write current context to the index cache
-     */
-    private function generateIndexCache() : void {
-        file_put_contents(
-            $this->cache_index,
-            sprintf("<?php\ndeclare(strict_types=1);\n/* Cache created on %s */\n\nreturn %s;\n\n",
-                (new DateTime())->format('c'),
-                var_export($this->pages, true)
-            )
-        );
     }
 }

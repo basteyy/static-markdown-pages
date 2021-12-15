@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace basteyy\StaticMarkdownPage\Exceptions;
+namespace basteyy\StaticMarkdownPages\Exceptions;
 
 use Exception;
 

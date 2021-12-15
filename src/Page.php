@@ -1,12 +1,12 @@
 <?php
 declare(strict_types=1);
 
-namespace basteyy\StaticMarkdownPage;
+namespace basteyy\StaticMarkdownPages;
 
-use basteyy\StaticMarkdownPage\Exceptions\IncompleteMetadataException;
-use basteyy\StaticMarkdownPage\Helper\SplitContent;
+use basteyy\StaticMarkdownPages\Exceptions\IncompleteMetadataException;
+use basteyy\StaticMarkdownPages\Helper\SplitContent;
 use League\CommonMark\GithubFlavoredMarkdownConverter;
-use function basteyy\StaticMarkdownPage\Helper\toSnakeCase;
+use function basteyy\StaticMarkdownPages\Helper\toSnakeCase;
 
 class Page
 {
